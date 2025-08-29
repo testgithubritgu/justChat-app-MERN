@@ -1,4 +1,4 @@
-backend/node_modules
-backend/.env
-just_chaat/node_modules
-just_chaat/.env
+/backend/node_modules
+/backend/.env
+/just_chaat/node_modules
+/just_chaat/.env
