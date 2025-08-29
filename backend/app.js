@@ -2,36 +2,39 @@ const express =  require("express")
 const cors = require("cors")
 const app = express()
 app.use(cors())
+
 const http = require("http").Server(app)
 const path = require("path")
+//middelware 
+app.use(express.json())
+
+//routes import
+const chatRoute = require("./route/chatRoute")
+const authRoute = require("./route/AuthRoute")
+
+
 const { sourceMapsEnabled } = require("process")
+const { connectDb } = require("./db/db")
 const io = require("socket.io")(http,{
     cors:{
         origin:"*"
     }
 })
-app.get("/",(req,res)=>{
-   res.sendFile(path.join(__dirname,"index.html"))
-})
+
+//api for chats
+app.use("/api/chats",chatRoute)
+
+//api for user auth
+app.use("/api/auth", authRoute)
 
 
 
 
-io.on("connection",(socket)=>{
-    console.log('client is connected')
-    socket.on('chat',(data)=>{
-        console.log(data)
-        io.emit("chat",data)
+connectDb().then(()=>{
+
+    http.listen(3001,()=>{
+        console.log('Server runnin on 3001')
     })
-    socket.on("disconnect",()=>{
-        console.log('client disconnected')
-      })
-  
-})
-
-
-http.listen(3001,()=>{
-    console.log('Server runnin on 3001')
 })
 
 

@@ -1,17 +1,18 @@
 const chatModel = require("../models/chatModel")
 
 const createChat = async (req ,res)=>{
-    const {firstId,secondId}= req.body 
+    
     try {
+        const { firstId, secondId } = req.body 
         const chat  = await chatModel.findOne({
             members:{$all:[firstId,secondId]}
         })
-        if (chat) return res.status(200).json({chat})
-        const newChat = new chatModel({
+        if (chat){ return res.status(200).json({chat})}
+        const newChat = await chatModel.create({
     members:[firstId,secondId]
 })
-    const response = await newChat.save()
-    res.status(200).json(response)
+
+        res.status(200).json(newChat)
     } catch (error) {
         res.status(500).json({err:error.message})
     }

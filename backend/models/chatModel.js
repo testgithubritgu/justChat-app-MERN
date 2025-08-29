@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 const chatSchema = new mongoose.Schema({
-    members:Array,
+    members:[{type:mongoose.Schema.Types.ObjectId}],
 
 },{timestamps:true})
 
